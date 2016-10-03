@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	
+	<h2>BINGO</h2>
+	<table border="1">
+		<tbody>
+			<tr>
+				<td id="col1"></td>
+				<td id="col2"></td>
+				<td id="col3"></td>
+				<td id="col4"></td>
+				<td id="col5"></td>
+			</tr>
+			<tr>
+				<td id="col6"></td>
+				<td id="col7"></td>
+				<td id="col8"></td>
+				<td id="col9"></td>
+				<td id="col10"></td>
+			</tr>
+			<tr>
+				<td id="col11"></td>
+				<td id="col12"></td>
+				<td id="col13"></td>
+				<td id="col14"></td>
+				<td id="col15"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h2 id="result"></h2>
+
+	<br><br>
+	<h2 id="win"></h2>
+	<button onclick="getBall(); checkBingo()" id="get-ball">Get Ball</button>
+
+<script>
+
+	var currentElement;
+	var currentNumber;
+	var usedNumbers = new Array(90);
+	var usedBallNumbers = new Array(90);
+	var getBallButton;
+	var resultNumber;
+	var colsMap = {};
+	var ongame = 15; // flag para saber cuando no hay mas para marcar
+
+	//-----------------------
+	generateBingo();
+
+	getBallButton = document.getElementById("get-ball");
+	resultNumber = document.getElementById("result");
+
+	//---------------------
+
+	function checkBingo() {
+		if (ongame == 0) {
+			document.getElementById("win").innerHTML = 'BINGO!!!!';
+		}
+	}
+
+
+	//---------------------
+	function getBall() {
+		var ballNumber = _getRandomNumber();
+		var matchCol;
+
+		if (!ongame) return;
+
+		// Buscar un numero que no se repita
+		do {
+			ballNumber = _getRandomNumber();
+		} while (usedBallNumbers[ballNumber]);
+
+		// Stop repetir bolas
+		usedBallNumbers[ballNumber] = true;
+
+		// Guardarlo en el interior del resultado
+		resultNumber.innerHTML = ballNumber;
+
+		// Si numbero existe en carton
+		if (usedNumbers[ballNumber]) {
+			matchCol = colsMap[ballNumber];
+			//console.log(matchCol);
+			document.getElementById(matchCol).innerHTML = 'X';
+			ongame--;
+			//console.log('existe: ' + ballNumber);
+		} else {
+			//console.log('no existe: ' + ballNumber);
+		}
+	}
+
+	function generateBingo() {
+		for (var i = 1; i <= 15; i++) {
+			var colId = "col" + i;
+			currentElement = document.getElementById(colId);
+
+			do {
+				currentNumber = _getRandomNumber();
+			} while (usedNumbers[currentNumber]);
+
+			colsMap[currentNumber] = colId;
+			usedNumbers[currentNumber] = true;
+			currentElement.innerHTML = currentNumber;
+		}
+	}
+
+	function _getRandomNumber() {
+		var number = Math.floor(Math.random() * 90) + 1;
+		return number;
+	}
+
+
+
+
+
+
+
+
+
+
+
+/* 
+	var flag = false;
+	for (var i = 0; i < 1000000; i++) {
+		var number = Math.floor(Math.random() * 90) + 1;
+		//console.log(number);
+		if(number > 0 && number < 91){
+			flag = true;
+		}
+	}
+
+	flag;
+	*/
+
+</script>
+
+</body>
+</html>
